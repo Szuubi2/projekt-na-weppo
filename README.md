@@ -2,8 +2,9 @@
 
 ## Backend:
 Po sklonowaniu repo 
-- xargs npm install < requirements.txt
-- node index.js
-
+'''
+xargs npm install < requirements.txt
+node index.js
+'''
 
 ## Frontend:
