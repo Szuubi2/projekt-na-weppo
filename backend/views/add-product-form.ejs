@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Nowy Produkt</title>
+</head>
+<body>
+    <h1>Dodaj Nowy Produkt</h1>
+    
+    <!-- Formularz do dodania nowego produktu -->
+    <form action="/add-new-product" method="POST">
+        <div>
+            <label for="name">Nazwa produktu:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="price">Cena:</label>
+            <input type="number" id="price" name="price" required>
+        </div>
+        <div>
+            <label for="description">Opis:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        
+        <button type="submit">Dodaj produkt</button>
+    </form>
+
+    <!-- Link do powrotu na stronę główną -->
+    <a href="/">Powrót na stronę główną</a>
+
+</body>
+</html>
