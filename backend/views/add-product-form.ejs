@@ -10,6 +10,10 @@
     
     <!-- Formularz do dodania nowego produktu -->
     <form action="/add-new-product" method="POST">
+        <div> <!-- moze tu skontrolowac czy takiego id juz nie ma, chyba ze bedziemy jakos generowac moze tak lepiej -->
+            <label for="id">Unikalne id produktu:</label>
+            <input type="number" id="id" name="id" required>
+        </div>
         <div>
             <label for="name">Nazwa produktu:</label>
             <input type="text" id="name" name="name" required>

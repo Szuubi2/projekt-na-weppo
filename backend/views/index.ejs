@@ -8,5 +8,17 @@
 <body>
     <h1>Sklep Internetowy</h1>
     <button onclick="window.location.href='/add-new-product'">Dodaj produkt</button>
+
+    <h2>Lista produktów</h2>
+    <ul>
+        <% products.forEach(product => { %>
+            <li>
+                <strong><%= product.name %></strong><br>
+                Cena: <%= product.price %> PLN<br>
+                <a href="/product/<%= product.id %>" class="btn btn-primary">Zobacz szczegóły</a>
+            </li>
+        <% }) %>
+    </ul>
+
 </body>
 </html>
