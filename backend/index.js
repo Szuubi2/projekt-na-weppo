@@ -20,7 +20,7 @@ app.get('/product/:id', (req, res) => {
   const product = products.find(p => p.id == productId); // Wyszukaj produkt po ID, pozniej w bazie danych 
   //na razie z tej tablicy products na gorze 
 
-  res.render('product-detail', { product });
+  res.render('product-details', { product });
 });
 
 
