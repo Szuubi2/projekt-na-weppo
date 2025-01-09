@@ -6,7 +6,7 @@ body {
 }
 
 .title-container {
-    width: 80%;
+    width: 100%;
     margin: auto;
     overflow: hidden;
 }
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-    background: #F98866;
+    background: #f98866c6;
 }
 
 h2 {
@@ -64,14 +64,14 @@ h2 {
 
 .btn-primary {
     display: inline-block;
-    background: #007bff;
+    background: #F98866;
     color: white;
     padding: 8px 12px;
     border-radius: 5px;
     text-decoration: none;
-    transition: background 0.3s;
+    transition: background 0.2s;
 }
 
 .btn-primary:hover {
-    background: #0056b3;
+    background: #f98866b9;
 }
