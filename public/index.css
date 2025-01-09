@@ -5,8 +5,9 @@ body {
     padding: 0;
     background-image: url('res/background-2.jpg');
     background-size: cover;
-    background-position: center;
     background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 .title-container {
@@ -58,16 +59,24 @@ h2 {
 }
 
 .product-list {
+    display: flex;
+    flex-wrap: wrap;
     list-style: none;
     padding: 0;
+    margin: 0;
+    justify-content: center;
 }
 
 .product-item {
     background: #ffffff;
-    margin: 10px 0;
+    max-width: 30%; 
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    flex: 1 1 calc(33% - 10px);
+    box-sizing: border-box;
+    margin: 5px;
+    text-align: center;
 }
 
 .product-item strong {
