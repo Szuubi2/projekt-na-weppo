@@ -4,23 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sklep Internetowy</title>
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <button onclick="window.location.href='/login'">Zaloguj się</button>
-    <button onclick="window.location.href='/logout'">wyloguj się</button>
-    <h1>Sklep Internetowy</h1>
-    <button onclick="window.location.href='/add-new-product'">Dodaj produkt</button>
-
-    <h2>Lista produktów</h2>
-    <ul>
-        <% products.forEach(product => { %>
-            <li>
-                <strong><%= product.name %></strong><br>
-                Cena: <%= product.price %> PLN<br>
-                <a href="/product/<%= product.id %>" class="btn btn-primary">Zobacz szczegóły</a>
-            </li>
-        <% }) %>
-    </ul>
-
+    <div class="title-container">
+        <header>
+            <h1>Sklep Internetowy</h1>
+            <div class="auth-buttons">
+                <button onclick="window.location.href='/login'">Zaloguj się</button>
+                <button onclick="window.location.href='/logout'">Wyloguj się</button>
+                <button onclick="window.location.href='/add-new-product'">Dodaj produkt</button>
+            </div>
+        </header>
+        <h2>Lista produktów</h2>
+        <ul class="product-list">
+            <% products.forEach(product => { %>
+                <li class="product-item">
+                    <strong><%= product.name %></strong><br>
+                    Cena: <%= product.price %> PLN<br>
+                    <a href="/product/<%= product.id %>" class="btn btn-primary">Zobacz szczegóły</a>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
 </body>
 </html>
