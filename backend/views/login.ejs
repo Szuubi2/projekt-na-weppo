@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
+</head>
+<body>
+    <!-- pozniej mozemy dodac tez maila ale to na koncu ewentualnie bo nw czy jest sens-->
+    <h1>Logowanie</h1>
+    <form action="/login" method="POST">
+        <label for="username">nazwa uzytkownika:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Hasło:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <button type="submit">Zaloguj się</button>
+        <% if ( locals.message ) { %>
+            <div class='message'>
+            <%= locals.message %>
+            </div>
+        <% } %>
+    </form>
+    <!-- Link do powrotu na stronę główną -->
+    <a href="/">Powrót na stronę główną</a>
+</body>
+</html>
