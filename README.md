@@ -1,10 +1,7 @@
 # Projekt na weppo
 
-## Backend:
 Po sklonowaniu repo 
 ```
-xargs npm install < requirements.txt
+npm install
 node index.js
 ```
-
-## Frontend:
