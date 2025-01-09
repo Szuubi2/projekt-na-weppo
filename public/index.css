@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: "DM Serif Text", serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
@@ -16,8 +16,8 @@ body {
 }
 
 header {
-    background: #A1BE95;
-    color: #ffffff;
+    background: black;
+    color: white;
     text-shadow: 
                 -1px -1px 0 black,  
                  1px -1px 0 black,
@@ -33,7 +33,7 @@ header {
 
 button {
     background: #F98866;
-    color: white;
+    color: black;
     border: none;
     padding: 10px 15px;
     cursor: pointer;
