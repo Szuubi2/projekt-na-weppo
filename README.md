@@ -1,4 +1,4 @@
-# Projekt na weppo
+# eShop 
 eShop project for the WEPPO university course.
 
 ## Authors:
