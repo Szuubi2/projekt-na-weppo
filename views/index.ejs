@@ -26,6 +26,12 @@
                     Cena: <%= product.price %> PLN<br>
                     <a href="/product/<%= product.id %>" class="btn btn-primary">Zobacz szczegóły</a>
                 </li>
+                <% if (user && user.role === 'admin') { %>
+                    <!-- Przycisk usuwania -->
+                    <form action="/delete-product/<%= product.id %>" method="POST" style="display:inline;">
+                      <button type="submit" style="color:red; cursor: pointer;">&#10060;</button>
+                    </form>
+                  <% } %>
             <% }) %>
         </ul>
     </div>

@@ -21,13 +21,14 @@ function authorize(req, res, next) {
     // zapisujemy w req informacje o userze z ciastka ( nazwe i role )
     next();
   } else {
-    res.redirect('/login'); // Jeśli użytkownik nie jest zalogowany, przekierowujemy go do logowania
+    res.redirect('/login'); 
   }
 }
 
 // strona główna
 app.get('/', (req, res) => {
-  res.render('index', { products });
+  const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
+  res.render('index', { products, user });
 });
 
 app.get('/my-account', authorize, (req, res) => {
@@ -107,6 +108,16 @@ app.post('/add-new-product', (req, res) => {
   console.log('Dodano nowy produkt:', newProduct);
   
   res.redirect('/');
+});
+
+app.post('/delete-product/:id', authorize, (req, res) => {
+  if (req.user.role === 'admin') {
+    const productId = req.params.id;
+    // Usuń produkt z listy, pozniej z bazy 
+    products = products.filter(product => product.id != productId);
+    console.log(`Produkt o ID ${productId} został usunięty przez ${req.user.username}`);
+    res.redirect('/');
+  }
 });
 
 
