@@ -120,6 +120,25 @@ app.post('/delete-product/:id', authorize, (req, res) => {
   }
 });
 
+app.get('/edit-product/:id', authorize, (req, res) => {
+  if (req.user.role === 'admin') {
+    const productId = req.params.id;
+    const product = products.find(p => p.id == productId); // pozniej szukamy info o produkcie w bazie
+    res.render('edit-product-form', { product });
+  }
+});
+
+app.post('/edit-product/:id',(req, res) => {
+    const productId = req.params.id;
+    const productIndex = products.findIndex(p => p.id == productId);
+
+    var edited_product = req.body;
+    edited_product.id = productId;
+    products[productIndex] = edited_product;
+
+    console.log(`Produkt o ID ${productId} został zaktualizowany`);
+    res.redirect('/');
+});
 
 app.listen(3000, () => {
   console.log('Server na http://localhost:3000/');

@@ -31,6 +31,8 @@
                     <form action="/delete-product/<%= product.id %>" method="POST" style="display:inline;">
                       <button type="submit" style="color:red; cursor: pointer;">&#10060;</button>
                     </form>
+                    <!-- Przycisk edycji -->
+                    <a href="/edit-product/<%= product.id %>">Edit</a>
                   <% } %>
             <% }) %>
         </ul>
