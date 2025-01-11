@@ -30,11 +30,22 @@ app.get('/', (req, res) => {
   res.render('index', { products });
 });
 
+app.get('/my-account', authorize, (req, res) => {
+  const { username, role } = req.user;
+
+  if (role === 'admin') {
+    res.render('admin-account', { username, role });
+  } 
+  else if (role === 'user') {
+    res.render('user-account', { username, role });
+  } 
+  else {
+    res.redirect('/login'); 
+  }
+});
+
 // strona logowania
 app.get('/login', (req, res) => {
-  if (req.signedCookies.user) { // jesli uzytkownik jest juz zalogowany 
-    return res.redirect('/'); 
-  }
   res.render('login');
 });
 
