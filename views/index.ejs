@@ -12,16 +12,30 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <div class="title-container">
         <header>
             <h1>Sklep Internetowy</h1>
             <div class="auth-buttons">
                 <button onclick="window.location.href='/my-account'" class="btn btn-transparent">
-                    <i class="bi bi-person text-white"></i> <!-- Ikona osoby w kolorze białym -->
+                    <i class="bi bi-person text-white"></i> 
                 </button>
                 <button onclick="window.location.href='/add-new-product'">Dodaj produkt</button>
             </div>
         </header>
+        <% if (message) { %>
+            <div id="message" class="alert alert-success" role="alert">
+                <%= message %>
+            </div>
+            <script>
+                setTimeout(function() {
+                  const messageElement = document.getElementById('message');
+                  if (messageElement) {
+                    messageElement.style.display = 'none';
+                  }
+                }, 3000);
+            </script>
+        <% } %>          
         <!-- <h2>Lista produktów</h2> -->
         <ul class="product-list">
             <% products.forEach(product => { %>
@@ -38,6 +52,13 @@
                     <!-- Przycisk edycji -->
                     <a href="/edit-product/<%= product.id %>">Edit</a>
                   <% } %>
+                  <% if (user && user.role === 'user') { %>
+                    <form action="/add-to-cart/<%= product.id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-transparent p-0" style="border: none; background: none;">
+                            <i class="bi bi-cart-plus" style="font-size: 1.5rem; color: #F98866;"></i>
+                        </button>
+                      </form>
+                    <% } %>
             <% }) %>
         </ul>
     </div>

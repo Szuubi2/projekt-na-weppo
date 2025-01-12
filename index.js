@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
 
 const app = express();
 
@@ -12,8 +13,20 @@ app.use(express.static('public'));
 // zmienic na jakis sensowny
 app.use(cookieParser('your_secret_key'));
 
+app.use(session({
+  secret: 'your_session_secret', // tez zmienic?
+  resave: false,
+  saveUninitialized: true
+}));
+
+
 // tu na razie tak poki nie mamy baz danych zeby cos wyswietlic 
-let products = [];
+let products = [{ 
+  id : 1, 
+  name : 'kwiat', 
+  price : 100,
+  description : 'ladny'
+}];
 
 function authorize(req, res, next) {
   if (req.signedCookies.user) {
@@ -28,7 +41,9 @@ function authorize(req, res, next) {
 // strona główna
 app.get('/', (req, res) => {
   const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
-  res.render('index', { products, user });
+  const message = req.session.message || null; 
+  req.session.message = null; 
+  res.render('index', { products, user, message });
 });
 
 app.get('/my-account', authorize, (req, res) => {
@@ -44,6 +59,8 @@ app.get('/my-account', authorize, (req, res) => {
     res.redirect('/login'); 
   }
 });
+
+
 
 // strona logowania
 app.get('/login', (req, res) => {
@@ -138,6 +155,27 @@ app.post('/edit-product/:id',(req, res) => {
 
     console.log(`Produkt o ID ${productId} został zaktualizowany`);
     res.redirect('/');
+});
+
+// produkt w koszyku {id: , quantity: }
+app.post('/add-to-cart/:id', (req, res) => {
+  const productId = req.params.id;
+
+  if (!req.session.cart) {
+    req.session.cart = [];
+  }
+
+  const product = req.session.cart.find(item => item.id === productId);
+  if (product) {
+    product.quantity += 1;
+  }
+  else {
+    req.session.cart.push( { id: productId, quantity: 1 } )
+  }
+
+  req.session.message = "Produkt dodany do koszyka!";
+  console.log("dodano produkt", productId);
+  res.redirect('/');
 });
 
 app.listen(3000, () => {
