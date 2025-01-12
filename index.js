@@ -60,7 +60,10 @@ app.get('/my-account', authorize, (req, res) => {
   }
 });
 
-
+app.get('/cart', (req, res) => {
+  const cartItems = req.session.cart;
+  res.render('cart', { cartItems });
+});
 
 // strona logowania
 app.get('/login', (req, res) => {
@@ -110,13 +113,13 @@ app.get('/add-new-product', authorize, (req, res) => {
 });
 
 app.post('/add-new-product', (req, res) => {
-  const { id, name, price, description } = req.body;
+  let { id, name, price, description } = req.body;
   // jakos sprawdzic czy id juz istnieje zeby sie nie powtorzylo albo juz przy wpisywaniu??
   const newProduct = {
-    id,
-    name,
-    price,
-    description
+    id : parseInt(id, 10),
+    name : name,
+    price : price,
+    description : description
   };
   
   // dodać logikę zapisywania produktu do bazy danych, na razie tak:
@@ -157,9 +160,20 @@ app.post('/edit-product/:id',(req, res) => {
     res.redirect('/');
 });
 
-// produkt w koszyku {id: , quantity: }
+// produkt w koszyku {id: , quantity: , price : , name: }
 app.post('/add-to-cart/:id', (req, res) => {
-  const productId = req.params.id;
+  const productId = parseInt(req.params.id, 10);
+  // pozniej szukamy tego w bazie 
+  const foundProduct = products.find(product => product.id === productId);
+
+if (!foundProduct) {
+  console.error(`Produkt o ID ${productId} nie został znaleziony.`);
+  req.session.message = "Nie znaleziono produktu.";
+  return res.redirect('/');
+}
+
+const price = foundProduct.price;
+const name = foundProduct.name;
 
   if (!req.session.cart) {
     req.session.cart = [];
@@ -170,13 +184,14 @@ app.post('/add-to-cart/:id', (req, res) => {
     product.quantity += 1;
   }
   else {
-    req.session.cart.push( { id: productId, quantity: 1 } )
+    req.session.cart.push( { id : productId, quantity : 1, price : price, name : name } )
   }
 
   req.session.message = "Produkt dodany do koszyka!";
   console.log("dodano produkt", productId);
   res.redirect('/');
 });
+
 
 app.listen(3000, () => {
   console.log('Server na http://localhost:3000/');

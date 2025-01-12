@@ -40,14 +40,12 @@
                     Cena: <%= product.price %> PLN<br>
                     <a href="/product/<%= product.id %>" class="btn btn-primary">Zobacz szczegóły</a>
                     
-                    <% if (user && user.role === 'user') { %>
-                        <!-- Ikonka koszyka na plakietce produktu -->
-                        <form action="/add-to-cart/<%= product.id %>" method="POST" style="display:inline;">
-                            <button type="submit" class="btn btn-transparent p-0 position-absolute" style="bottom: 10px; right: 10px; border: none; background: none;">
-                                <i class="bi bi-cart-plus" style="font-size: 2rem; color: #F98866;"></i>
-                            </button>
-                        </form>
-                    <% } %>
+                    <!-- Ikonka koszyka na plakietce produktu -->
+                    <form action="/add-to-cart/<%= product.id %>" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-transparent p-0 position-absolute" style="bottom: 10px; right: 10px; border: none; background: none;">
+                            <i class="bi bi-cart-plus" style="font-size: 2rem; color: #F98866;"></i>
+                        </button>
+                    </form>
                     
                     <% if (user && user.role === 'admin') { %>
                         <!-- Przycisk usuwania -->
@@ -73,6 +71,9 @@
         <button onclick="window.location.href='/cart'" class="btn btn-transparent ms-2">
             <i class="bi bi-cart-fill" style="font-size: 2rem; color: #F98866;"></i>
         </button>
+        <% if (user && user.role === 'admin') { %>
+            <button onclick="window.location.href='/add-new-product'" class="btn btn-success ms-2">Dodaj produkt</button>
+        <% } %>
     </div>
 </body>
 </html>
