@@ -1,0 +1,32 @@
+body {
+    font-family: "DM Serif Text", serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-image: url('res/background-2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    text-align: center;
+    
+}
+
+.description {
+    background-color: white;
+    color:black;
+    position: absolute;
+    top: 20%;
+    left : 10%;
+    width: 30%;
+    min-width: 40vh;
+}
+
+.title-header {
+    background-color: black;
+    padding: 5% 0;
+    width: 100%;
+    height: 10vh;
+    z-index: 10;
+}
