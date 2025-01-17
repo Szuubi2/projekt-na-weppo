@@ -13,10 +13,34 @@
 </head>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <div class="title-container">
-        <header>
-            <h1>Sklep Internetowy</h1>
-        </header>
+
+
+    <div class="container-fluid">
+        <div class="row justify-content-between align-items-center">
+            <!-- Lewa kolumna -->
+            <div class="col-auto">
+                <% if (user && user.role === 'admin') { %>
+                    <button onclick="window.location.href='/add-new-product'" class="btn btn-success ms-2">Dodaj produkt</button>
+                <% } %>
+            </div>
+    
+            <!-- Środkowa kolumna (Tytuł) -->
+            <div class="col-auto">
+                <h1 class="m-0">Sklep Internetowy</h1>
+            </div>
+    
+            <!-- Prawa kolumna (Ikony) -->
+            <div class="col-auto">
+                <button onclick="window.location.href='/my-account'" class="btn btn-transparent me-2">
+                    <i class="bi bi-person-fill" style="font-size: 2rem; color: #F98866;"></i>
+                </button>
+                <button onclick="window.location.href='/cart'" class="btn btn-transparent">
+                    <i class="bi bi-cart-fill" style="font-size: 2rem; color: #F98866;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
         
         <% if (message) { %>
             <div id="message" class="alert alert-success" role="alert">
@@ -45,7 +69,7 @@
                         <button type="submit" class="btn btn-transparent p-0 position-absolute" style="bottom: 10px; right: 10px; border: none; background: none;">
                             <i class="bi bi-cart-plus" style="font-size: 2rem; color: #F98866;"></i>
                         </button>
-                    </form>
+                        </form>
                     
                     <% if (user && user.role === 'admin') { %>
                         <!-- Przycisk usuwania -->
@@ -58,22 +82,6 @@
                 </li>
             <% }) %>
         </ul>
-    </div>
-
-    <!-- Ikony w prawym górnym rogu -->
-    <div class="position-fixed top-0 end-0 m-3">
-        <!-- Ikona konta -->
-        <button onclick="window.location.href='/my-account'" class="btn btn-transparent">
-            <i class="bi bi-person-fill" style="font-size: 2rem; color: #F98866;"></i>
-        </button>
-        
-        <!-- Ikona koszyka -->
-        <button onclick="window.location.href='/cart'" class="btn btn-transparent ms-2">
-            <i class="bi bi-cart-fill" style="font-size: 2rem; color: #F98866;"></i>
-        </button>
-        <% if (user && user.role === 'admin') { %>
-            <button onclick="window.location.href='/add-new-product'" class="btn btn-success ms-2">Dodaj produkt</button>
-        <% } %>
-    </div>
+   
 </body>
 </html>

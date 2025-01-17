@@ -10,6 +10,7 @@ body {
     background-attachment: fixed;
 }
 
+
 .title-container {
     width: 100%;
     margin: auto;
@@ -75,7 +76,6 @@ h2 {
     border-radius: 5px;
     flex: 1 1 calc(33% - 10px);
     box-sizing: border-box;
-    margin: 5px;
     text-align: center;
 }
 
