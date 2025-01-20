@@ -26,6 +26,30 @@ let products = [{
   name : 'kwiat', 
   price : 100,
   description : 'ladny'
+}, 
+{ 
+  id : 2, 
+  name : 'kwiat', 
+  price : 100,
+  description : 'ladny'
+}, 
+{ 
+  id : 3, 
+  name : 'kwiat', 
+  price : 100,
+  description : 'ladny'
+},
+{ 
+  id : 4, 
+  name : 'kwiat', 
+  price : 100,
+  description : 'ladny'
+},
+{ 
+  id : 5, 
+  name : 'kwiat', 
+  price : 100,
+  description : 'ladny'
 }];
 
 function authorize(req, res, next) {
