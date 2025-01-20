@@ -16,7 +16,7 @@
 
 
     <div class="container-fluid">
-        <div class="row justify-content-between align-items-center">
+        <div class="row align-items-center justify-content-between">
             <!-- Lewa kolumna -->
             <div class="col-auto">
                 <% if (user && user.role === 'admin') { %>
@@ -26,11 +26,11 @@
     
             <!-- Środkowa kolumna (Tytuł) -->
             <div class="col-auto">
-                <h1 class="m-0">Sklep Internetowy</h1>
+                <h1 class="m-0">Sklep</h1>
             </div>
     
             <!-- Prawa kolumna (Ikony) -->
-            <div class="col-auto">
+            <div class="col-auto order-first order-sm-3">
                 <button onclick="window.location.href='/my-account'" class="btn btn-transparent me-2">
                     <i class="bi bi-person-fill" style="font-size: 2rem; color: #F98866;"></i>
                 </button>
