@@ -12,27 +12,35 @@
     <link rel="stylesheet" href="/product-details.css">
 </head>
 <body>
-    <div class = "title-header"></div>
-    <div class="position-fixed top-0 end-0 m-3">
-
-        <!-- Link do powrotu na stronę główną -->
-        <a href="/">Powrót na stronę główną</a>
-
-        <!-- Ikona konta -->
-        <button onclick="window.location.href='/my-account'" class="btn btn-transparent">
-            <i class="bi bi-person-fill" style="font-size: 2rem; color: #F98866;"></i>
-        </button>
+    <div class = "container-fluid"></div>
+    <!-- pasek górny -->
+        <div class="row align-items-center justify-content-end" style="background-color: #000000">
+            <div class="col-auto">
+                <a href="/">Powrót na stronę główną</a>
+            </div>
+            
+            <div class="col-auto">
+                <button onclick="window.location.href='/my-account'" class="btn btn-transparent">
+                    <i class="bi bi-person-fill"></i>
+                </button>
+            </div>
         
-        <!-- Ikona koszyka -->
-        <button onclick="window.location.href='/cart'" class="btn btn-transparent ms-2">
-            <i class="bi bi-cart-fill" style="font-size: 2rem; color: #F98866;"></i>
-        </button>
-    </div>
-    <div class = "description">
-        <h2><%= product.name %></h2>
-        <p><strong>Cena:</strong> <%= product.price %> PLN</p>
-        <p><strong>Opis:</strong> <%= product.description %></p>
-    </div>
+            <div class="col-auto">
+                <button onclick="window.location.href='/cart'" class="btn btn-transparent ms-2">
+                    <i class="bi bi-cart-fill"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class = "row">
+            <div class="col-auto">
+                <div class = "description">
+                    <h2><%= product.name %></h2>
+                    <p><strong>Cena:</strong> <%= product.price %> PLN</p>
+                    <p><strong>Opis:</strong> <%= product.description %></p>
+                </div>
+            </div>
+        </div>
 
 
 </body>

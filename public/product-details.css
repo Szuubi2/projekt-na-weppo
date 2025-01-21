@@ -30,3 +30,8 @@ body {
     height: 10vh;
     z-index: 10;
 }
+
+button i {
+    font-size: 3rem;
+    color: #2e4f4e;
+}

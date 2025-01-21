@@ -25,12 +25,13 @@ body {
 
 .product-item {
     position: relative;
-    background: #DDDFC9;
+    background: #ffffff;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     text-align: center;
     color: #1E352B;
+    flex-direction: column;
 }
 
 .product-item strong {
@@ -56,5 +57,5 @@ body {
 
 button i {
     font-size: 3rem;
-    color: #1E352B;
+    color: #2e4f4e;
 }
