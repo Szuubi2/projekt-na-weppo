@@ -1,14 +1,25 @@
-1. Pobrac PostgreSQL
-2. Pobrac pgAdmin4
-3. Stworzyc serwer, zalogowac sie do pgAdmin4 jako superuser (postgres)
+## Instalacja
+Pobrac PostgreSQL
+Pobrac pgAdmin4
+https://www.youtube.com/watch?v=UGfteFq_6Co
+postgres haslo postgres najlepiej
+Stworzyc serwer, zalogowac sie do pgAdmin4 jako superuser (postgres)
 
-4. w pgAdmin4
+## Tworzenie Uzytkownika weppoAdmin
+Stworzyc uzytkownika weppoAdmin
+w pgAdmin4
 Object -> Login/Group roles -> dac nazwe, haslo i privilages (Can login? i Create Databases? trzeba zaznaczyc)
+https://www.youtube.com/watch?v=oNJpktM65eY
+weppoAdmin haslo weppoAdmin najlepiej
 
-postgres haslo postgres
-weppoAdmin haslo weppoAdmin
+## Tworzenie bazy danych
+Na pasku po lewej stronie pgAdmin4 klikamy prawym na "Databases" -> Create i ustawiamy nazwe na "weppoSklep" i wlasciciela na "weppoAdmin"
+Reszta ustawien moze byc domyslna
 
-5. CREATE TABLE Products (
+## Tworzenie tabelek w bazie danych
+Tam gdzie sie kwerendy dla bazy danych weppoSklep pisze:
+
+CREATE TABLE Products (
     Id SERIAL PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
     Description TEXT,
