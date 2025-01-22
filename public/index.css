@@ -1,5 +1,5 @@
 body {
-    font-family: "DM Serif Text", serif;
+    font-family: 'Work Sans', sans-serif;
     background-color: rgba(244, 244, 244, 0.9);;
     margin: 0;
     padding: 0;
@@ -23,39 +23,14 @@ body {
 
 
 
-.product-item {
-    position: relative;
-    background: #ffffff;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    text-align: center;
-    color: #1E352B;
-    flex-direction: column;
-}
-
 .product-item strong {
     display: block;
     font-size: 1.2em;
     margin-bottom: 5px;
 }
 
-.btn-primary {
-    display: inline-block;
-    border: none;
-    background: #ACB795;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background 0.2s;
-}
-
-.btn-primary:hover {
-    background: #556F54;;
-}
 
 button i {
-    font-size: 3rem;
-    color: #2e4f4e;
+    font-size: 2rem;
+    color: #000000;
 }
