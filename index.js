@@ -109,7 +109,7 @@ app.post('/login', (req, res) => {
     res.redirect('/');
   }
   else {
-    res.render( 'login', { message : "Zła nazwa logowania lub hasło" });
+    res.render( 'login', { message : "Zły login lub hasło" });
   }
 });
 

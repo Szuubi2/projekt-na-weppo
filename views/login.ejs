@@ -3,28 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="login.css">
     <title>Logowanie</title>
 </head>
 <body>
-    <!-- pozniej mozemy dodac tez maila ale to na koncu ewentualnie bo nw czy jest sens-->
-    <form action="/login" method="POST">
-        <h1>Login</h1>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Log in</button>
-        <% if ( locals.message ) { %>
-            <div class='message'>
-            <%= locals.message %>
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-start">
+            <div class="col-auto">
+                <button onclick="window.location.href='/'" class="btn btn-transparent">
+                    <i class="bi bi-arrow-left-square-fill"></i>
+                </button>
             </div>
-        <% } %>
-    </form>
-    <!-- Link do powrotu na stronę główną -->
-    <a href="/">Back</a>
+        </div>
+    <!-- pozniej mozemy dodac tez maila ale to na koncu ewentualnie bo nw czy jest sens-->
+        <form action="/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <button type="submit" class="btn-login">Log in</button>
+            <% if ( locals.message ) { %>
+                <div class='message'>
+                <%= locals.message %>
+                </div>
+            <% } %>
+        </form>
+    </div>
 </body>
 </html>

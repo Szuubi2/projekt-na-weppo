@@ -1,5 +1,5 @@
 body {
-    font-family: "DM Serif Text", serif;
+    font-family: 'Work Sans', sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
@@ -13,14 +13,6 @@ body {
     
 }
 
-h1 {
-    margin-top: 50px;
-    text-shadow: 
-        -1px -1px 0 black,  
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
-}
 
 form {
     position: absolute;
@@ -28,9 +20,26 @@ form {
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.9);
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
 }
+
+.btn-login {
+    background-color: #78a2a6; 
+    color: white;
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin-top: 15px;
+    transition: background-color 0.3s ease; /* Animacja zmiany koloru tła */
+}
+
+.btn-login:hover {
+    background-color: #557477; /* Kolor tła po najechaniu */
+}
+
 
 label {
     display: block;
@@ -47,25 +56,14 @@ input[type="password"] {
     box-sizing: border-box;
 }
 
-button {
-    background: #F98866;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.2s;
-}
-
-button:hover {
-    background: #f98866c6;
-}
-
 .message {
     color: #F98866;
     margin-top: 15px;
 }
-
+button i {
+    font-size: 2rem;
+    color: #000000;
+}
 a {
     color: white;
     text-decoration: none;

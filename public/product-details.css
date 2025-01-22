@@ -16,7 +16,6 @@ body {
 .custom-column {
     line-height: 1.8;
     background-color: #DDDFC9;
-    min-height: 300px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
