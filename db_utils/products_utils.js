@@ -22,7 +22,7 @@ export async function insertProductWithoutImage(productName, description, price,
 export const getProductsByName = async (productName) => {
     const query = `
         SELECT * FROM Products
-        WHERE Name ILIKE $1;
+        WHERE Name ILIKE '%' || $1 || '%';
     `;
 
     try {
