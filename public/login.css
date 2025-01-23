@@ -22,6 +22,10 @@ form {
     background: rgba(0, 0, 0, 0.9);
     padding: 30px;
     border-radius: 10px;
+    display: flex; 
+    flex-direction: column; /* Elementy w kolumnie */
+    align-items: center;    /* Wyśrodkowanie w poziomie */
+   
 }
 
 .btn-login {
@@ -32,7 +36,7 @@ form {
     border-radius: 5px; 
     font-size: 16px; 
     cursor: pointer; 
-    margin-top: 15px;
+    margin-bottom: 20px;
     transition: background-color 0.3s ease; /* Animacja zmiany koloru tła */
 }
 
@@ -43,14 +47,13 @@ form {
 
 label {
     display: block;
-    margin: 10px 0 5px;
+    margin: 5px 0 5px;
 }
 
-input[type="text"],
+input[type="text"] ,
 input[type="password"] {
     width: 100%;
     padding: 10px;
-    margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 5px;
     box-sizing: border-box;
@@ -58,11 +61,12 @@ input[type="password"] {
 
 .message {
     color: #F98866;
-    margin-top: 15px;
+    margin-bottom: 15px;
 }
 button i {
     font-size: 2rem;
     color: #000000;
+    
 }
 a {
     color: white;
@@ -74,6 +78,7 @@ a {
     padding: 20px;
     border-radius: 10px;
 }
+
 
 a:hover {
     text-decoration: underline;

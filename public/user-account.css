@@ -1,0 +1,18 @@
+body {
+    font-family: 'Work Sans', sans-serif;
+    background-color: rgba(244, 244, 244, 0.9);;
+    margin: 0;
+    padding: 0;
+    background-image: url('res/bg2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    line-height: 1.6; 
+    letter-spacing: 0.5px; 
+}
+
+button i {
+    font-size: 2rem;
+    color: #000000;
+}
