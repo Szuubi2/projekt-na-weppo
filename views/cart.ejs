@@ -3,12 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twój Koszyk</title>
+    <title>My cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="cart.css">
 </head>
 <body>
-    <div class="container mt-4">
-        <h1 class="mb-4">Twój Koszyk</h1>
+    <div class="container-fluid">
+        <!-- Pasek górny -->
+        <div class="row g-4 align-items-center justify-content-between" style="background-color: whitesmoke">
+            <!-- Lewa kolumna -->
+            <div class="col-auto">
+            <button onclick="window.location.href='/'" class="btn btn-transparent">
+                <i class="bi bi-arrow-left-square-fill"></i>
+            </button>
+            </div>
+
+            <!-- Środkowa kolumna (Tytuł) -->
+            <div class="col-auto">
+                <h1 class="m-0" >My cart</h1>
+            </div>
+
+            <!-- Prawa kolumna (Ikony) -->
+            <div class="col-auto">
+                <button onclick="window.location.href='/my-account'" class="btn btn-transparent me-2">
+                    <i class="bi bi-person-fill"></i>
+                </button>
+                <button onclick="window.location.href='/cart'" class="btn btn-transparent">
+                    <i class="bi bi-cart-fill"></i>
+                </button>
+            </div>
+        </div>
         
         <% if (cartItems && cartItems.length > 0) { %>
             <table class="table table-bordered">
@@ -50,8 +77,12 @@
                 </div>
             </div>
         <% } else { %>
-            <div class="alert alert-warning text-center">
-                Twój koszyk jest pusty. <a href="/" class="alert-link">Wróć do sklepu</a>, aby dodać produkty.
+            <div class="row justify-content-center text-center" style="margin-top: 50px;">
+                <div class="col-auto" style = "background-color: whitesmoke; padding: 20px; border-radius: 5px;">
+                    <div style="height: 10px;"></div>
+                    <h3>Your cart is currently empty.</h3>
+                    <p>Start shopping to add items to your cart.</p>
+                </div>
             </div>
         <% } %>
     </div>

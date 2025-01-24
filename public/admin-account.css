@@ -12,28 +12,6 @@ body {
     letter-spacing: 0.5px; 
 }
 
-.row {
-    margin-bottom: 30px;
-}
-
-
-.auth-buttons {
-    margin: 10px 0;
-}
-
-.row.g-4.justify-content-evenly.align-items-center {
-    margin-left: 2px;  /* Ustaw margines z lewej strony */
-    margin-right: 2px; /* Ustaw margines z prawej strony */
-}
-
-
-.product-item strong {
-    display: block;
-    font-size: 1.2em;
-    margin-bottom: 5px;
-}
-
-
 button i {
     font-size: 2rem;
     color: #000000;
