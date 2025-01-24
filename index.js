@@ -70,8 +70,8 @@ app.get('/', (req, res) => {
   const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
   const message = req.session.message || null; 
   req.session.message = null; 
-  //var products;
-  //getProductsByName("tulipan").then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
+  //var products;// ponizej jako argument powinna byc zawartosc paska wyszukiwan w ""
+  //getProductsByName("").then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
   res.render('index', { products, user, message });
 });
 
