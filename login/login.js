@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes');
 const session = require('express-session');
+const routes = require('./routes'); 
 
 dotenv.config();
 
@@ -24,6 +25,18 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authRoutes);
 
+
+app.use(express.json());
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { maxAge: 3600000 },
+}));
+
+app.use(routes);
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
@@ -36,13 +49,13 @@ rejestracja i logowanie działają, wylogowanie mówi, że działa, ale nie dzia
 żeby przetestować: w drugim terminalu trzeba wpisać np:
 
 REGISTER:
-curl -X POST http:/register 
--H "Content-Type: application/json" 
+curl -X POST http:/register \
+-H "Content-Type: application/json" \
 -d '{"username": "postgres", "email": "test@example.com", "password": "password"}'
 
 LOGIN:
-curl -X POST http://localhost:3000/auth/login 
--H "Content-Type: application/json" 
+curl -X POST http://localhost:3000/auth/login  \
+-H "Content-Type: application/json" \
 -d '{"email": "test@example.com", "password": "password"}' \
 -c cookies.txt
 
