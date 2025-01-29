@@ -80,4 +80,18 @@ router.post('/logout', (req, res) => {
 });
 
 
+const isAuthenticated = (req, res, next) => {
+  if (req.session && req.session.user) {
+    next(); // użytkownik zalogowany, przejdź dalej
+  } else {
+    res.status(401).json({ error: 'Access denied' });
+  }
+};
+
+// chroniony endpoint
+router.get('/auth/protected', isAuthenticated, (req, res) => {
+  res.json({ message: 'Access granted to protected route' });
+});
+
+
 module.exports = router;
