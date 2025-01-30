@@ -36,6 +36,21 @@
                 </button>
             </div>
         </div>
+        <% if (message) { %>
+            <div id="message" class="row justify-content-center text-center">
+                <div class="col-auto" style = "background-color: whitesmoke; padding: 20px; border-radius: 5px;">
+                    <%= message %>
+                </div>
+            </div>
+            <script>
+                setTimeout(function() {
+                  const messageElement = document.getElementById('message');
+                  if (messageElement) {
+                    messageElement.style.display = 'none';
+                  }
+                }, 3000);
+            </script>
+        <% } %>   
         
         <% if (cartItems && cartItems.length > 0) { %>
             <table class="table table-bordered">
@@ -59,7 +74,7 @@
                             <td><%= item.price %> PLN</td>
                             <td><%= item.price * item.quantity %> PLN</td>
                             <td>
-                                <form action="/cart/remove/<%= item.id %>" method="POST" style="display:inline;">
+                                <form action="/remove-from-cart/<%= item.id %>" method="POST" style="display:inline;">
                                     <button type="submit" class="btn btn-danger btn-sm">Usuń</button>
                                 </form>
                             </td>

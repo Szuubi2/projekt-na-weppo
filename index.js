@@ -71,8 +71,8 @@ app.get('/', (req, res) => {
   const message = req.session.message || null; 
   req.session.message = null; 
   // ponizej jako argument powinna byc zawartosc paska wyszukiwan w ""
-  getProductsByName("").then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
-  //res.render('index', { products, user, message });
+  //getProductsByName("").then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
+  res.render('index', { products, user, message });
 });
 
 app.get('/my-account', authorize, (req, res) => {
@@ -91,7 +91,9 @@ app.get('/my-account', authorize, (req, res) => {
 
 app.get('/cart', (req, res) => {
   const cartItems = req.session.cart;
-  res.render('cart', { cartItems });
+  const message = req.session.message || null; 
+  req.session.message = null; 
+  res.render('cart', { cartItems, message });
 });
 
 app.get('/create-account', (req, res) => {
@@ -230,6 +232,18 @@ const name = foundProduct.name;
   console.log("dodano produkt", productId);
   res.redirect('/');
 });
+
+app.post('/remove-from-cart/:id', (req, res) => {
+  const productId = parseInt(req.params.id, 10);
+
+  const productIndex = req.session.cart.findIndex(item => item.id === productId);
+  
+  req.session.cart.splice(productIndex, 1);
+
+  req.session.message = "Produkt usunięty z koszyka!";
+  console.log("Usunięto produkt", productId);
+  res.redirect('/cart');
+})
 
 
 app.listen(3000, () => {
