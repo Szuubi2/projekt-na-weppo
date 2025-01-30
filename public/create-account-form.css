@@ -1,0 +1,85 @@
+body {
+    font-family: 'Work Sans', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    background-image: url('res/bg2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+    text-align: center;
+    
+}
+
+
+form {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    display: flex; 
+    flex-direction: column; /* Elementy w kolumnie */
+    align-items: center;    /* Wyśrodkowanie w poziomie */
+   
+}
+
+.btn-login {
+    background-color: #78a2a6; 
+    color: white;
+    border: none; 
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease; /* Animacja zmiany koloru tła */
+}
+
+.btn-login:hover {
+    background-color: #557477; /* Kolor tła po najechaniu */
+}
+
+
+label {
+    display: block;
+    margin: 0px 0 5px;
+}
+
+input[type="text"] ,
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.message {
+    color: #F98866;
+    margin-bottom: 15px;
+}
+button i {
+    font-size: 2rem;
+    color: #000000;
+    
+}
+a {
+    color: white;
+    text-decoration: none;
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}

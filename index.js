@@ -94,6 +94,16 @@ app.get('/cart', (req, res) => {
   res.render('cart', { cartItems });
 });
 
+app.get('/create-account', (req, res) => {
+  res.render('create-account-form');
+});
+
+app.post('/create-account', (req, res) => {
+  console.log('nowy uzytkownik', req.body.username);
+  // pozniej zapisac te dane w bazie 
+  res.redirect('/');
+});
+
 // strona logowania
 app.get('/login', (req, res) => {
   res.render('login');
