@@ -34,9 +34,11 @@
                 <button onclick="window.location.href='/my-account'" class="btn btn-transparent me-2">
                     <i class="bi bi-person-fill"></i>
                 </button>
+                <% if (!user || user.role === 'user') { %>
                 <button onclick="window.location.href='/cart'" class="btn btn-transparent" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Bottom popover">
                     <i class="bi bi-cart-fill"></i>
                 </button>
+                <% } %>
             </div>
         </div>
 
