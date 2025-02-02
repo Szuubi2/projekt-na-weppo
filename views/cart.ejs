@@ -52,30 +52,32 @@
             </script>
         <% } %>   
         
+      
         <% if (cartItems && cartItems.length > 0) { %>
-            <table class="table table-bordered">
+            <div class="cart-table-container">
+            <table class="table">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Produkt</th>
-                        <th>Ilość</th>
-                        <th>Cena za szt.</th>
-                        <th>Łącznie</th>
-                        <th>Akcje</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     <% let totalPrice = 0; %>
                     <% cartItems.forEach((item, index) => { %>
                         <tr>
-                            <td><%= index + 1 %></td>
                             <td><%= item.name %></td>
-                            <td><%= item.quantity %></td>
                             <td><%= item.price %> PLN</td>
+                            <td><%= item.quantity %></td>
                             <td><%= item.price * item.quantity %> PLN</td>
-                            <td>
+                            <td class="text-end">
                                 <form action="/remove-from-cart/<%= item.id %>" method="POST" style="display:inline;">
-                                    <button type="submit" class="btn btn-danger btn-sm">Usuń</button>
+                                    <button type="submit" class="btn btn-transparent">
+                                        <i class="bi bi-x-lg" style="font-size: 1rem;"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -83,13 +85,16 @@
                     <% }); %>
                 </tbody>
             </table>
+            
+            <div class="d-flex justify-content-between mt-3">
+                <h3>Łączna kwota: <%= totalPrice %> PLN</h3>
+                <a href="/checkout" class="btn btn-dark">Proceed to checkout</a>
+            </div>
+            </div>
 
             <div class="mt-4">
-                <h3>Łączna kwota: <%= totalPrice %> PLN</h3>
-                <div class="d-flex justify-content-between mt-3">
-                    <a href="/" class="btn btn-secondary">Kontynuuj zakupy</a>
-                    <a href="/checkout" class="btn btn-success">Przejdź do kasy</a>
-                </div>
+                
+                
             </div>
         <% } else { %>
             <div class="row justify-content-center text-center" style="margin-top: 50px;">

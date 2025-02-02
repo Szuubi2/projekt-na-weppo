@@ -15,3 +15,12 @@ button i {
     font-size: 2rem;
     color: #000000;
 }
+
+.cart-table-container {
+    background-color: whitesmoke;
+    margin-top: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 20px; /* Odstęp wewnętrzny */
+    border-radius: 10px; /* Zaokrąglone rogi */
+}
