@@ -118,12 +118,18 @@ app.post('/place-order', (req, res) => {
     //productPrice: ['100', '200', '150'], // Ceny produktów
     //productQuantity: ['1', '2', '1'],   // Ilości produktów
     //username: 'john_doe'                // Nazwa użytkownika
-
+  // Generowanie numeru zamówienia (np. losowy lub z bazy danych)
+  const orderId = Math.floor(Math.random() * 100000);  
+  //pozniej zrobic zeby nr zamowienia sie zgadzal z tym w bazie 
   console.log('nowe zamowienie zlozone przez', username, ': ', productName )
-  res.send('Zamówienie zostało złożone');
+  req.session.cart = [];
+  res.redirect(`/thank-you?orderId=${orderId}&username=${username}`);
 });
 
-
+app.get('/thank-you', (req, res) => {
+  const { orderId, username } = req.query;
+  res.render('thank-you', { orderId, username });
+});
 
 app.get('/create-account', (req, res) => {
   res.render('create-account-form');
