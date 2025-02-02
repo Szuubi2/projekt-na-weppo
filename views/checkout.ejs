@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="checkout.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Pasek górny -->
+        <div class="row g-4 align-items-center " style="background-color: whitesmoke">
+            <!-- Lewa kolumna -->
+            <div class="col-1">
+            <button onclick="window.location.href='/'" class="btn btn-transparent">
+                <i class="bi bi-arrow-left-square-fill"></i>
+            </button>
+            </div>
+
+            <!-- Środkowa kolumna (Tytuł) -->
+            <div class="col-10 text-center">
+                <h1 class="m-0">Checkout</h1>
+            </div>
+        </div>
+        
+            <div class="cart-table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let totalPrice = 0; %>
+                    <% cartItems.forEach((item, index) => { %>
+                        <tr>
+                            <td><%= item.name %></td>
+                            <td><%= item.price %> PLN</td>
+                            <td><%= item.quantity %></td>
+                            <td><%= item.price * item.quantity %> PLN</td>
+                        </tr>
+                        <% totalPrice += item.price * item.quantity; %>
+                    <% }); %>
+                </tbody>
+            </table>
+            
+            <div class="d-flex justify-content-between mt-3">
+                <h3>Łączna kwota: <%= totalPrice %> PLN</h3>
+                <form action="/place-order" method="POST">
+                    <% cartItems.forEach((item) => { %>
+                        <input type="hidden" name="productId" value="<%= item.id %>">
+                        <input type="hidden" name="productName" value="<%= item.name %>">
+                        <input type="hidden" name="productPrice" value="<%= item.price %>">
+                        <input type="hidden" name="productQuantity" value="<%= item.quantity %>">
+                    <% }); %>
+                    <input type="hidden" name="username" value="<%= username %>">
+                    <button type="submit" class="btn btn-dark">Place Order</button>
+                </form>                
+            </div>
+            </div>
+
+            <div class="mt-4">
+                
+                
+            </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

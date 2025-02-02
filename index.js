@@ -61,7 +61,8 @@ function authorize(req, res, next) {
     // zapisujemy w req informacje o userze z ciastka ( nazwe i role )
     next();
   } else {
-    res.redirect('/login'); 
+    req.user = { username: 'guest', role: 'guest' };;  
+    next(); 
   }
 }
 
@@ -95,6 +96,34 @@ app.get('/cart', (req, res) => {
   req.session.message = null; 
   res.render('cart', { cartItems, message });
 });
+
+app.get('/checkout', authorize, (req, res) => {
+  const { username, role } = req.user;
+  const cartItems = req.session.cart;
+
+  if (role === 'user') {
+    res.render('checkout', { username, cartItems });  
+  } 
+  else{
+    res.render('cart', {cartItems, message: "Please log in to proceed"});
+  }
+
+});
+
+app.post('/place-order', (req, res) => {
+  const { productId, productName, productPrice, productQuantity, username } = req.body;
+  // tu wrzucic dane do bazy sa one w formie typu: (przyklad) 
+    //productId: ['1', '2', '3'],        // Identyfikatory produktów
+    //productName: ['Product 1', 'Product 2', 'Product 3'],  // Nazwy produktów
+    //productPrice: ['100', '200', '150'], // Ceny produktów
+    //productQuantity: ['1', '2', '1'],   // Ilości produktów
+    //username: 'john_doe'                // Nazwa użytkownika
+
+  console.log('nowe zamowienie zlozone przez', username, ': ', productName )
+  res.send('Zamówienie zostało złożone');
+});
+
+
 
 app.get('/create-account', (req, res) => {
   res.render('create-account-form');
