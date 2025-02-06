@@ -56,6 +56,10 @@ let products = [{
   description : 'ladny'
 }];
 
+
+
+
+
 function authorize(req, res, next) {
   if (req.signedCookies.user) {
     req.user = JSON.parse(req.signedCookies.user);
@@ -257,24 +261,42 @@ app.post('/delete-product/:id', authorize, async (req, res) => {
   }
 });
 
-app.get('/edit-product/:id', authorize, (req, res) => {
+app.get('/edit-product/:id', authorize, async (req, res) => {
   if (req.user.role === 'admin') {
     const productId = req.params.id;
-    const product = products.find(p => p.id == productId); // pozniej szukamy info o produkcie w bazie
-    res.render('edit-product-form', { product });
+    try {
+      const product = await getProductById(productId);
+      if (!product) {
+        req.session.message = "Produkt nie istnieje";
+        return res.redirect('/');
+      }
+      res.render('edit-product-form', { product });
+    } catch (error) {
+      console.error("Błąd przy pobieraniu produktu: ", error);
+      res.status(500).send("Błąd serwera");
+    }
+  } else {
+    res.status(403).send("Brak uprawnień.");
   }
 });
 
-app.post('/edit-product/:id',(req, res) => {
+app.post('/edit-product/:id', authorize, async (req, res) => {
+  if (req.user.role === 'admin') {
     const productId = req.params.id;
-    const productIndex = products.findIndex(p => p.id == productId);
+    const { name, price, description } = req.body;  // edited product
 
-    var edited_product = req.body;
-    edited_product.id = productId;
-    products[productIndex] = edited_product;
-
-    console.log(`Produkt o ID ${productId} został zaktualizowany`);
+    try {
+      await updateProductById(productId, { name, price, description });
+      console.log(`Produkt o ID ${productId} został zaktualizowany w bazie`);
+      req.session.message = "Produkt zaktualizowany!";
+    } catch (error) {
+      console.error("Błąd przy aktualizacji produktu: ", error);
+      req.session.message = "Błąd podczas aktualizacji produktu.";
+    }
     res.redirect('/');
+  } else {
+    res.status(403).send("Brak uprawnień.");
+  }
 });
 
 // produkt w koszyku {id: , quantity: , price : , name: }
