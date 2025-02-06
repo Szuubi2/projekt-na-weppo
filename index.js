@@ -188,7 +188,7 @@ app.get('/add-new-product', authorize, (req, res) => {
   }
 });
 
-app.post('/add-new-product', (req, res) => {
+app.post('/add-new-product', async (req, res) => {
   let { id, name, price, description } = req.body;
   // jakos sprawdzic czy id juz istnieje zeby sie nie powtorzylo albo juz przy wpisywaniu??
   const newProduct = {
@@ -198,11 +198,8 @@ app.post('/add-new-product', (req, res) => {
     description : description
   };
   
-  // dodać logikę zapisywania produktu do bazy danych, na razie tak:
-  products.push(newProduct);
-
+  await insertProductWithoutImage(name, description, price, 5);
   console.log('Dodano nowy produkt:', newProduct);
-  
   res.redirect('/');
 });
 
