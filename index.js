@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import pool from './db_pool.js'
 import { insertProductWithoutImage, getProductsByName, getProductById } from './db_utils/products_utils.js';
+import { insertOrder, insertOrderDetails } from './db_utils/products_utils.js';
 
 
 const app = express();
@@ -110,21 +111,36 @@ app.get('/checkout', authorize, (req, res) => {
 
 });
 
-app.post('/place-order', (req, res) => {
+
+app.post('/place-order', async (req, res) => {
   const { productId, productName, productPrice, productQuantity, username } = req.body;
-  // tu wrzucic dane do bazy sa one w formie typu: (przyklad) 
-    //productId: ['1', '2', '3'],        // Identyfikatory produktów
-    //productName: ['Product 1', 'Product 2', 'Product 3'],  // Nazwy produktów
-    //productPrice: ['100', '200', '150'], // Ceny produktów
-    //productQuantity: ['1', '2', '1'],   // Ilości produktów
-    //username: 'john_doe'                // Nazwa użytkownika
-  // Generowanie numeru zamówienia (np. losowy lub z bazy danych)
-  const orderId = Math.floor(Math.random() * 100000);  
-  //pozniej zrobic zeby nr zamowienia sie zgadzal z tym w bazie 
-  console.log('nowe zamowienie zlozone przez', username, ': ', productName )
-  req.session.cart = [];
-  res.redirect(`/thank-you?orderId=${orderId}&username=${username}`);
+
+  try {
+      // assume we have user id from the cookie
+      const userId = req.user ? req.user.id : 1; // default userId = 1, if user not found
+
+      // create an order (with "pending" status)
+      const orderId = await insertOrder(userId, 'pending');
+      
+      // save in OrderDetails
+      for (let i = 0; i < productId.length; i++) {
+          await insertOrderDetails(
+              orderId,
+              parseInt(productId[i], 10),
+              parseInt(productQuantity[i], 10),
+              parseFloat(productPrice[i])
+          );
+          console.log(`Zamówienie ${orderId}: Produkt ${productName[i]} został dodany`);
+      }
+
+      req.session.cart = [];  // clear the cart after placing an order
+      res.redirect(`/thank-you?username=${username}&orderId=${orderId}`);
+  } catch (error) {
+      console.error('Błąd podczas składania zamówienia:', error);
+      res.status(500).send('Błąd serwera podczas składania zamówienia');
+  }
 });
+
 
 app.get('/thank-you', (req, res) => {
   const { orderId, username } = req.query;
