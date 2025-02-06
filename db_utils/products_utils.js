@@ -1,6 +1,9 @@
 import pool from '../db_pool.js';
 
 
+// Product
+
+
 export async function insertProductWithoutImage(productName, description, price, stockQuantity) {
         const query = `
             INSERT INTO Products (Name, Description, Price, StockQuantity)
@@ -49,6 +52,31 @@ export const getProductById = async (productId) => {
     }
 };
 
+
+export const updateProductById = async (id, name, price, description) => {
+  try {
+    const result = await pool.query(
+      'UPDATE Products SET Name = $1, Price = $2, Description = $3 WHERE Id = $4 RETURNING *',
+      [name, price, description, id]
+    );
+
+    if (result.rowCount === 0) {
+      throw new Error(`Produkt o ID ${id} nie istnieje.`);
+    }
+
+    return result.rows[0]; // returns updated product
+  } catch (error) {
+    console.error('Błąd podczas aktualizacji produktu:', error);
+    throw error;
+  }
+};
+
+
+
+
+
+
+// Order
 
 
 export const insertOrder = async (userId, status) => {
