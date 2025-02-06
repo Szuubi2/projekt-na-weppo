@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import pool from './db_pool.js'
-import { insertProductWithoutImage, getProductsByName } from './db_utils/products_utils.js';
+import { insertProductWithoutImage, getProductsByName, getProductById } from './db_utils/products_utils.js';
 
 
 const app = express();
@@ -71,9 +71,9 @@ app.get('/', (req, res) => {
   const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
   const message = req.session.message || null; 
   req.session.message = null; 
-  const searchBarContent = req.query.search || ""; 
-  getProductsByName(searchBarContent).then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
-  //res.render('index', { products, user, message });
+  // ponizej jako argument powinna byc zawartosc paska wyszukiwan w ""
+  //getProductsByName("").then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
+  res.render('index', { products, user, message });
 });
 
 app.get('/my-account', authorize, (req, res) => {
@@ -188,19 +188,34 @@ app.get('/add-new-product', authorize, (req, res) => {
   }
 });
 
-app.post('/add-new-product', async (req, res) => {
-  let { id, name, price, description } = req.body;
-  // jakos sprawdzic czy id juz istnieje zeby sie nie powtorzylo albo juz przy wpisywaniu??
-  const newProduct = {
-    id : parseInt(id, 10),
-    name : name,
-    price : price,
-    description : description
-  };
-  
-  await insertProductWithoutImage(name, description, price, 5);
-  console.log('Dodano nowy produkt:', newProduct);
-  res.redirect('/');
+app.post('/add-new-product', authorize, async (req, res) => {
+  try { 
+    let { id, name, price, description } = req.body;
+
+    const newProduct = {
+      id : parseInt(id, 10),
+      name : name,
+      price : price,
+      description : description
+    };
+    
+    // check if id already exists in db
+    const existingProduct = await getProductById(id);
+    if (existingProduct) {
+      req.session.message = `Produkt o ID ${id} już istnieje!`;
+      return res.redirect('/add-new-product');
+    }
+
+    // if id is unique, add product to db
+    await insertProductWithoutImage(newProduct);
+    console.log('Dodano nowy produkt:', newProduct);
+    
+    req.session.message = "Produkt dodany";
+    res.redirect('/');
+  } catch (error) {
+    console.error('Błąd przy dodawaniu produktu: ', error);
+    res.status(500).send('Błąd serwera');
+  }
 });
 
 app.post('/delete-product/:id', authorize, (req, res) => {
