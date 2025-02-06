@@ -34,3 +34,17 @@ export const getProductsByName = async (productName) => {
     }
 };
 
+export const getProductById = async (productId) => {
+    const query = `
+        SELECT * FROM Products
+        WHERE Id = $1;
+    `;
+
+    try {
+        const res = await pool.query(query, [productId]);
+        return res.rows.length > 0 ? res.rows[0] : null; // null if product doesnt exist
+    } catch (err) {
+        console.error('Error fetching products:', err.message);
+        throw err;
+    }
+};
