@@ -71,9 +71,9 @@ app.get('/', (req, res) => {
   const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
   const message = req.session.message || null; 
   req.session.message = null; 
-  // ponizej jako argument powinna byc zawartosc paska wyszukiwan w ""
-  //getProductsByName("").then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
-  res.render('index', { products, user, message });
+  const searchBarContent = req.query.search || ""; 
+  getProductsByName(searchBarContent).then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
+  //res.render('index', { products, user, message });
 });
 
 app.get('/my-account', authorize, (req, res) => {
@@ -218,13 +218,26 @@ app.post('/add-new-product', authorize, async (req, res) => {
   }
 });
 
-app.post('/delete-product/:id', authorize, (req, res) => {
+app.post('/delete-product/:id', authorize, async (req, res) => {
   if (req.user.role === 'admin') {
     const productId = req.params.id;
-    // Usuń produkt z listy, pozniej z bazy 
-    products = products.filter(product => product.id != productId);
-    console.log(`Produkt o ID ${productId} został usunięty przez ${req.user.username}`);
+
+    try {
+      const result = await pool.query('DELETE FROM Products WHERE Id = $1 RETURNING *', [productId]);
+
+      if (result.rowCount === 0) {
+        req.session.message = `Produkt o ID ${productId} nie istnieje.`;
+      } else {
+        req.session.message = `Produkt o ID ${productId} został usunięty.`;
+      }
+    } catch (error) {
+      console.error('Błąd podczas usuwania produktu:', error);
+      req.session.message = 'Wystąpił błąd podczas usuwania produktu.';
+    }
+
     res.redirect('/');
+  } else {
+    res.status(403).send('Brak uprawnień.');
   }
 });
 
