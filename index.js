@@ -299,37 +299,45 @@ app.post('/edit-product/:id', authorize, async (req, res) => {
   }
 });
 
-// produkt w koszyku {id: , quantity: , price : , name: }
-app.post('/add-to-cart/:id', (req, res) => {
+// now with debilo-odpornosc!
+// user cannot add more items than are available in stock
+app.post('/add-to-cart/:id', async (req, res) => {
   const productId = parseInt(req.params.id, 10);
-  // pozniej szukamy tego w bazie 
-  const foundProduct = products.find(product => product.id === productId);
+  try {
+    const product = await getProductById(productId);
+    if (!product) {
+      req.session.message = "Nie znaleziono produktu.";
+      return res.redirect('/');
+    }
+    if (product.stock <= 0) {
+      req.session.message = "Out of stock";
+      return res.redirect('/');
+    }
 
-if (!foundProduct) {
-  console.error(`Produkt o ID ${productId} nie został znaleziony.`);
-  req.session.message = "Nie znaleziono produktu.";
-  return res.redirect('/');
-}
+    if (!req.session.cart) {
+      req.session.cart = [];
+    }
 
-const price = foundProduct.price;
-const name = foundProduct.name;
+    const cartItem = req.session.cart.find(item => item.id === productId);
+    if (cartItem) {
+      if (cartItem.quantity < product.stock) {
+        cartItem.quantity += 1;
+      } else {
+        req.session.message = "No more available in stock";
+        return res.redirect('/');
+      }
+    } else {
+      req.session.cart.push({ id: productId, quantity: 1, price: product.price, name: product.name });
+    }
 
-  if (!req.session.cart) {
-    req.session.cart = [];
+    req.session.message = "Produkt dodany do koszyka!";
+  } catch (error) {
+    console.error("Błąd przy dodawaniu do koszyka: ", error);
+    req.session.message = "Błąd serwera.";
   }
-
-  const product = req.session.cart.find(item => item.id === productId);
-  if (product) {
-    product.quantity += 1;
-  }
-  else {
-    req.session.cart.push( { id : productId, quantity : 1, price : price, name : name } )
-  }
-
-  req.session.message = "Produkt dodany do koszyka!";
-  console.log("dodano produkt", productId);
   res.redirect('/');
 });
+
 
 app.post('/remove-from-cart/:id', (req, res) => {
   const productId = parseInt(req.params.id, 10);
