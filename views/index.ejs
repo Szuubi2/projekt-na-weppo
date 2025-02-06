@@ -17,8 +17,22 @@
     <div class="container-fluid">
         <!-- Pasek górny -->
         <div class="row g-4 align-items-center justify-content-between" style="background-color: whitesmoke">
+    
             <!-- Lewa kolumna -->
             <div class="col-auto">
+                <form id="searchForm">
+                    <input type="text" id="searchInput" name="query" placeholder="Search products...">
+                    <button type="submit">Search</button>
+                </form>
+                
+                <script>
+                document.getElementById('searchForm').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const searchQuery = document.getElementById('searchInput').value;
+                    window.location.href = `/?search=${encodeURIComponent(searchQuery)}`;
+                });
+                </script>
+                
                 <% if (user && user.role === 'admin') { %>
                     <button onclick="window.location.href='/add-new-product'" class="btn btn-success ms-2">Dodaj produkt</button>
                 <% } %>

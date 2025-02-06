@@ -38,3 +38,9 @@ button i {
     font-size: 2rem;
     color: #000000;
 }
+
+
+#searchForm {
+    font-size: 20px;
+    position: relative;
+  }
