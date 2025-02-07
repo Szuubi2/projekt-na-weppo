@@ -71,19 +71,16 @@ function authorize(req, res, next) {
   }
 }
 
-// search bar
-app.get('/', async (req, res) => {
-  const searchBarContent = req.query.search || "";
-  let products = await getProductsByName(searchBarContent);
-  const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null;
-  
-  let message = null;
-  if (searchBarContent && products.length === 0) {
-    message = `Brak wyników wyszukiwania dla "${searchBarContent}"`;
-  }
-  
-  res.render('index', { products, user, message });
+// strona główna
+app.get('/', (req, res) => {
+  const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
+  const message = req.session.message || null; 
+  req.session.message = null; 
+  const searchBarContent = req.query.search || ""; 
+  getProductsByName(searchBarContent).then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
+  //res.render('index', { products, user, message });
 });
+
 
 app.get('/my-account', authorize, (req, res) => {
   const { username, role } = req.user;
