@@ -321,7 +321,8 @@ app.post('/add-to-cart/:id', async (req, res) => {
 
     const cartItem = req.session.cart.find(item => item.id === productId);
     if (cartItem) {
-      if (cartItem.quantity < product.stock) {
+      //console.log(cartItem.quantity, product.stockquantity, "\n");
+      if (cartItem.quantity < product.stockquantity) {
         cartItem.quantity += 1;
       } else {
         req.session.message = "No more available in stock";
