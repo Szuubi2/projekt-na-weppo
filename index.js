@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 import { insertProductWithoutImage, getProductsByName, getProductById } from './db_utils/products_utils.js';
 import { insertOrder, insertOrderDetails } from './db_utils/products_utils.js';
 import { updateProductById } from './db_utils/products_utils.js';
+import { updateProductStock } from './db_utils/products_utils.js';
+
 
 
 const app = express();
@@ -120,35 +122,58 @@ app.get('/checkout', authorize, (req, res) => {
   else{
     res.render('cart', {cartItems, message: "Please log in to proceed"});
   }
-
 });
+
 
 
 app.post('/place-order', async (req, res) => {
   const { productId, productName, productPrice, productQuantity, username } = req.body;
 
+  if (!productId || productId.length === 0) {
+    return res.status(400).send('Nie można złożyć zamówienia – brak produktów w koszyku.');
+  }
+
   try {
-      // assume we have user id from the cookie
-      const userId = req.user ? req.user.id : 1; // default userId = 1, if user not found
+      // get user from the cookie
+      const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null;
+      
+      // check if user is logged in
+      if (!user || !user.username) {
+          return res.status(401).send('Musisz być zalogowany, aby złożyć zamówienie.');
+      }
+
+      // get user id from db 
+      const userResult = await pool.query(
+          'SELECT Id FROM Users WHERE Name = $1',
+          [user.username]
+      );
+
+      if (userResult.rows.length === 0) {
+          return res.status(404).send('Użytkownik nie istnieje.');
+      }
+
+      const userId = userResult.rows[0].id;
 
       // create an order (with "pending" status)
       const orderId = await insertOrder(userId, 'pending');
-      
+
       // save in OrderDetails
       for (let i = 0; i < productId.length; i++) {
-          await insertOrderDetails(
-              orderId,
-              parseInt(productId[i], 10),
-              parseInt(productQuantity[i], 10),
-              parseFloat(productPrice[i])
-          );
-          console.log(`Zamówienie ${orderId}: Produkt ${productName[i]} został dodany`);
+          const id = parseInt(productId[i], 10);
+          const quantity = parseInt(productQuantity[i], 10);
+          const price = parseFloat(productPrice[i]);
+
+          await insertOrderDetails(orderId, id, quantity, price);
+          console.log(`🛒 Zamówienie ${orderId}: Dodano produkt ${productName[i]} (ID: ${id})`);
+
+          // update stock quantity in db
+          await updateProductStock(id, quantity);
       }
 
-      req.session.cart = [];  // clear the cart after placing an order
+      req.session.cart = []; // clear the cart after placing an order
       res.redirect(`/thank-you?username=${username}&orderId=${orderId}`);
   } catch (error) {
-      console.error('Błąd podczas składania zamówienia:', error);
+      console.error('❌ Błąd podczas składania zamówienia:', error);
       res.status(500).send('Błąd serwera podczas składania zamówienia');
   }
 });
@@ -192,7 +217,8 @@ app.post('/login', (req, res) => {
   if (username == 'user' && password == 'user' || username == 'admin' && password == 'admin') { // poprawne dane
     // pozniej tu sprawdizmy role ('user' lub 'admin') w bazie po nazwie uzytkownika, na razie role = username
     var role = username;
-    const userData = { username, role };
+    var userId = 1;
+    const userData = { userId, username, role };
     res.cookie('user', JSON.stringify(userData), { signed: true });
     console.log('wydano ciastko dla', userData);
     res.redirect('/');

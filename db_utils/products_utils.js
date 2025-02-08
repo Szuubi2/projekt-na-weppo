@@ -1,4 +1,5 @@
 import pool from '../db_pool.js';
+import bcrypt from 'bcrypt';
 
 
 // Product
@@ -80,6 +81,7 @@ export const updateProductById = async (id, updatedProduct) => {
 // Order
 
 
+
 export const insertOrder = async (userId, status) => {
     const query = `
         INSERT INTO Orders (UserId, Status)
@@ -87,17 +89,14 @@ export const insertOrder = async (userId, status) => {
         RETURNING Id;
     `;
 
-    const values = [userId, status];
-
     try {
-        const res = await pool.query(query, values);
-        return res.rows[0].id;  // returns the id of the new order
+        const result = await pool.query(query, [userId, status]);
+        return result.rows[0].id;
     } catch (err) {
-        console.error('Błąd podczas zapisywania zamówienia:', err.message);
+        console.error('❌ Błąd podczas zapisywania zamówienia:', err.message);
         throw err;
     }
 };
-
 
 
 export const insertOrderDetails = async (orderId, productId, quantity, unitPrice) => {
@@ -106,12 +105,27 @@ export const insertOrderDetails = async (orderId, productId, quantity, unitPrice
         VALUES ($1, $2, $3, $4);
     `;
 
-    const values = [orderId, productId, quantity, unitPrice];
+    try {
+        await pool.query(query, [orderId, productId, quantity, unitPrice]);
+    } catch (err) {
+        console.error('❌ Błąd podczas zapisywania szczegółów zamówienia:', err.message);
+        throw err;
+    }
+};
+
+
+export const updateProductStock = async (productId, quantity) => {
+    const query = `
+        UPDATE Products 
+        SET StockQuantity = StockQuantity - $1 
+        WHERE Id = $2;
+    `;
 
     try {
-        await pool.query(query, values);
+        await pool.query(query, [quantity, productId]);
+        console.log(`✅ Zaktualizowano stan magazynowy dla produktu ID ${productId}`);
     } catch (err) {
-        console.error('Błąd podczas zapisywania szczegółów zamówienia:', err.message);
+        console.error('❌ Błąd podczas aktualizacji stanu magazynowego:', err.message);
         throw err;
     }
 };
