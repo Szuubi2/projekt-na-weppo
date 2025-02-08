@@ -71,16 +71,20 @@ function authorize(req, res, next) {
   }
 }
 
-// strona główna
-app.get('/', (req, res) => {
-  const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null; // info z ciastka
-  const message = req.session.message || null; 
-  req.session.message = null; 
+// search bar
+app.get('/', async (req, res) => {
+  const user = req.signedCookies.user ? JSON.parse(req.signedCookies.user) : null;
+  const message = req.session.message || null;
+  req.session.message = null;
   const searchBarContent = req.query.search || ""; 
-  getProductsByName(searchBarContent).then((out) => {products = out}).then(() => {res.render('index', { products, user, message })});
-  //res.render('index', { products, user, message });
-});
 
+  getProductsByName(searchBarContent).then((products) => {
+    if (searchBarContent && products.length === 0) {
+      return res.render('index', { products: [], user, message: `Brak wyników wyszukiwania dla "${searchBarContent}"` });
+    }
+    res.render('index', { products, user, message });
+  });
+});
 
 app.get('/my-account', authorize, (req, res) => {
   const { username, role } = req.user;
