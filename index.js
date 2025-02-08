@@ -2,6 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import pool from './db_pool.js'
+import bcrypt from 'bcrypt';
 import { insertProductWithoutImage, getProductsByName, getProductById } from './db_utils/products_utils.js';
 import { insertOrder, insertOrderDetails } from './db_utils/products_utils.js';
 
@@ -86,6 +87,7 @@ app.get('/', async (req, res) => {
   });
 });
 
+
 app.get('/my-account', authorize, (req, res) => {
   const { username, role } = req.user;
 
@@ -156,6 +158,15 @@ app.get('/thank-you', (req, res) => {
   res.render('thank-you', { orderId, username });
 });
 
+
+
+
+
+
+// =============================================================================================
+// register, log in, log out
+
+// create account
 app.get('/create-account', (req, res) => {
   res.render('create-account-form');
 });
@@ -195,6 +206,14 @@ app.get('/logout', (req, res) => {
   res.redirect('/'); 
 });
 
+
+
+
+
+//=============================================================================
+
+
+
 // strona konkretnego produktu
 app.get('/product/:id', (req, res) => {
   const productId = req.params.id;
@@ -215,24 +234,29 @@ app.get('/add-new-product', authorize, (req, res) => {
 
 app.post('/add-new-product', authorize, async (req, res) => {
   try { 
-    let { id, name, price, description } = req.body;
+    let { name, description, price, stockquantity } = req.body;
 
     const newProduct = {
-      id : parseInt(id, 10),
       name : name,
+      description : description,
       price : price,
-      description : description
+      stockquantity : stockquantity
     };
     
-    // check if id already exists in db
-    const existingProduct = await getProductById(id);
-    if (existingProduct) {
-      req.session.message = `Produkt o ID ${id} już istnieje!`;
+    // check if identical product already exists in db
+    const existingProduct = await pool.query(
+      'SELECT * FROM products WHERE name = $1 AND description = $2',
+      [name, description]
+    );
+
+    if (existingProduct.rows.length > 0) {
+      req.session.message = `Produkt "${name}" już istnieje!`;
       return res.redirect('/add-new-product');
     }
 
-    // if id is unique, add product to db
-    await insertProductWithoutImage(newProduct);
+
+    // if product is unique, add product to db
+    await insertProductWithoutImage( name, description, price, stockquantity );
     console.log('Dodano nowy produkt:', newProduct);
     
     req.session.message = "Produkt dodany";
