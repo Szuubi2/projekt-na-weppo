@@ -129,3 +129,56 @@ export const updateProductStock = async (productId, quantity) => {
         throw err;
     }
 };
+
+
+
+
+
+
+// ===================================================================
+// user
+//
+
+
+
+
+export async function insertUser(id, name, password, address) {
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    
+    const query = `
+        INSERT INTO users (id, name, passwordhash, address)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id;
+    `;
+    
+    const values = [id, name, hashedPassword, address]; 
+
+    try {
+        const res = await pool.query(query, [id, name, hashedPassword, address]);
+        console.log("6 ok\n")
+        return res.rows[0].id; 
+    } catch (err) {
+        console.error('Błąd przy dodawaniu użytkownika: ', err.message);
+        throw err;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
