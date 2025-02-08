@@ -211,20 +211,44 @@ app.get('/logout', (req, res) => {
 
 
 
+
 //=============================================================================
+// each product page
 
 
+app.get('/product/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    
+    // get product from db by id
+    const productResult = await pool.query('SELECT * FROM products WHERE id = $1', [productId]);
 
-// strona konkretnego produktu
-app.get('/product/:id', (req, res) => {
-  const productId = req.params.id;
-  const product = products.find(p => p.id == productId); // Wyszukaj produkt po ID, pozniej w bazie danych 
-  //na razie z tej tablicy products na gorze 
+    // check if product exists
+    if (productResult.rows.length === 0) {
+      return res.status(404).render('error', { message: 'Produkt nie istnieje' });
+    }
 
-  res.render('product-details', { product });
+    const product = productResult.rows[0]; // 1st query result
+
+    res.render('product-details', { product });
+  } catch (error) {
+    console.error('Błąd pobierania produktu:', error);
+    res.status(500).send('Błąd serwera');
+  }
 });
 
-// dodawanie nowego produktu na sprzedaz przez admina
+
+
+
+
+
+
+
+// =============================================================================
+// admin privileges: product modifications 
+
+
+// add new product
 app.get('/add-new-product', authorize, (req, res) => {
   if (req.user.role === 'admin') { 
     res.render('add-product-form');
@@ -337,6 +361,17 @@ app.post('/edit-product/:id', authorize, async (req, res) => {
     res.status(403).send("Brak uprawnień.");
   }
 });
+
+
+
+
+
+
+
+// ==============================================================================
+// user: cart
+
+
 
 // now with debilo-odpornosc!
 // user cannot add more items than are available in stock
