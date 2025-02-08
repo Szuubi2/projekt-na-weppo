@@ -162,23 +162,6 @@ export async function insertUser(id, name, password, address) {
         console.error('Błąd przy dodawaniu użytkownika: ', err.message);
         throw err;
     }
-}
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+insertUser(2, 'pwaw8', '2137', 'test@example.com');
