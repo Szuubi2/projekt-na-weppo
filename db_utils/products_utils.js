@@ -4,18 +4,18 @@ import pool from '../db_pool.js';
 // Product
 
 
-export async function insertProductWithoutImage(productName, description, price, stockQuantity) {
+export async function insertProductWithoutImage(id, productName, description, price, stockQuantity) {
         const query = `
-            INSERT INTO Products (Name, Description, Price, StockQuantity)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO Products (Id, Name, Description, Price, StockQuantity)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING Id;
         `;
 
-        const values = [productName, description, price, stockQuantity];
+        const values = [id, productName, description, price, stockQuantity];
 
         try {
             const res = await pool.query(query, values);
-            return;
+            return res.rows[0].id;
         } catch (err) {
             console.error('Error fetching products:', err.message);
             throw err;
@@ -53,24 +53,25 @@ export const getProductById = async (productId) => {
 };
 
 
-export const updateProductById = async (id, name, price, description) => {
-  try {
-    const result = await pool.query(
-      'UPDATE Products SET Name = $1, Price = $2, Description = $3 WHERE Id = $4 RETURNING *',
-      [name, price, description, id]
-    );
+export const updateProductById = async (id, updatedProduct) => {
+    const { name, description, price, stockquantity } = updatedProduct;
+  
+    try {
+      const result = await pool.query(
+        'UPDATE products SET name = $1, description = $2, price = $3, stockquantity = $4 WHERE id = $5 RETURNING *',
+        [name, description, price, stockquantity, id] 
+      );
+       
+      if (result.rowCount === 0) {
+        throw new Error(`Produkt o ID ${id} nie istnieje.`);
+      }
 
-    if (result.rowCount === 0) {
-      throw new Error(`Produkt o ID ${id} nie istnieje.`);
+      return result.rows[0];
+    } catch (error) {
+      console.error('Błąd podczas aktualizacji produktu:', error);
+      throw error;
     }
-
-    return result.rows[0]; // returns updated product
-  } catch (error) {
-    console.error('Błąd podczas aktualizacji produktu:', error);
-    throw error;
-  }
-};
-
+  };
 
 
 

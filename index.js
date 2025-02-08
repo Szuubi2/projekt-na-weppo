@@ -5,6 +5,7 @@ import pool from './db_pool.js'
 import bcrypt from 'bcrypt';
 import { insertProductWithoutImage, getProductsByName, getProductById } from './db_utils/products_utils.js';
 import { insertOrder, insertOrderDetails } from './db_utils/products_utils.js';
+import { updateProductById } from './db_utils/products_utils.js';
 
 
 const app = express();
@@ -254,9 +255,18 @@ app.post('/add-new-product', authorize, async (req, res) => {
       return res.redirect('/add-new-product');
     }
 
+    // find 1st available id
+    const missingIdResult = await pool.query(`
+      SELECT MIN(t1.id + 1) AS first_available_id
+      FROM products t1
+      LEFT JOIN products t2 ON t1.id + 1 = t2.id
+      WHERE t2.id IS NULL;
+    `);
+
+    const firstAvailableId = missingIdResult.rows[0].first_available_id || 1; // Jeśli brak rekordów, zaczynamy od 1
 
     // if product is unique, add product to db
-    await insertProductWithoutImage( name, description, price, stockquantity );
+    await insertProductWithoutImage( firstAvailableId, name, description, price, stockquantity );
     console.log('Dodano nowy produkt:', newProduct);
     
     req.session.message = "Produkt dodany";
@@ -312,10 +322,10 @@ app.get('/edit-product/:id', authorize, async (req, res) => {
 app.post('/edit-product/:id', authorize, async (req, res) => {
   if (req.user.role === 'admin') {
     const productId = req.params.id;
-    const { name, price, description } = req.body;  // edited product
+    const { name, description, price, stockquantity } = req.body;  // edited product
 
     try {
-      await updateProductById(productId, { name, price, description });
+      await updateProductById(productId, { name, description, price, stockquantity });
       console.log(`Produkt o ID ${productId} został zaktualizowany w bazie`);
       req.session.message = "Produkt zaktualizowany!";
     } catch (error) {
