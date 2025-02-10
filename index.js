@@ -7,6 +7,8 @@ import { insertProductWithoutImage, getProductsByName, getProductById } from './
 import { insertOrder, insertOrderDetails } from './db_utils/products_utils.js';
 import { updateProductById } from './db_utils/products_utils.js';
 import { updateProductStock } from './db_utils/products_utils.js';
+import { insertUser, deleteUser } from './db_utils/products_utils.js';
+
 
 
 
@@ -197,43 +199,86 @@ app.get('/create-account', (req, res) => {
   res.render('create-account-form');
 });
 
-app.post('/create-account', (req, res) => {
-  console.log('nowy uzytkownik', req.body.username);
-  // pozniej zapisac te dane w bazie 
-  res.redirect('/');
+app.post('/create-account', authorize, async (req, res) => {
+  try {
+    const { email, username, password } = req.body;
+    const address = email;
+    
+    // search for first available id
+    const missingIdResult = await pool.query(`
+      SELECT MIN(t1.id + 1) AS first_available_id
+      FROM users t1
+      LEFT JOIN users t2 ON t1.id + 1 = t2.id
+      WHERE t2.id IS NULL;
+    `);
+
+    const firstAvailableId = missingIdResult.rows[0].first_available_id || 1; // if no records, start from 1
+    // add new user
+    await insertUser(firstAvailableId, username, password, address);
+    
+    console.log('Dodano nowego użytkownika:', { username, address });
+    req.session.message = "Użytkownik dodany";
+    res.redirect('/');
+  } catch (error) {
+    console.error('Błąd przy dodawaniu użytkownika: ', error);
+    res.status(500).send('Błąd serwera');
+  }
 });
 
-// strona logowania
+
+
+// login page
 app.get('/login', (req, res) => {
   res.render('login');
 });
 
-app.post('/login', (req, res) => {
-  var username = req.body.username;
-  var password = req.body.password;
 
-// na razie zeby sie zalogowac jako user to nazwa i haslo to "user" a jako admin to username i haslo sa "admin"
-// pozniej zrobi sie rejestracje i bazy, w tym ifie bedzie sprawdzanie czy taki uzytkownik istnieje
-  if (username == 'user' && password == 'user' || username == 'admin' && password == 'admin') { // poprawne dane
-    // pozniej tu sprawdizmy role ('user' lub 'admin') w bazie po nazwie uzytkownika, na razie role = username
-    var role = username;
-    var userId = 1;
-    const userData = { userId, username, role };
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // check if login is as admin or casual user
+    // (admin is not in db)
+    if (username === 'admin' && password === 'admin') {
+      const adminData = { userId: 0, username, role: 'admin' };
+      res.cookie('user', JSON.stringify(adminData), { signed: true });
+      console.log('✅Zalogowano jako ADMIN');
+      return res.redirect('/');
+    }
+
+    // if not admin, search in db for the user
+    const query = `SELECT id, name, passwordhash FROM users WHERE name = $1;`;
+    const result = await pool.query(query, [username]);
+
+    if (result.rowCount === 0) {
+      return res.render('login', { message: 'Zły login lub hasło' });
+    }
+
+    const user = result.rows[0];
+
+    // password verification
+    const isMatch = await bcrypt.compare(password, user.passwordhash);
+    if (!isMatch) {
+      return res.render('login', { message: 'Zły login lub hasło' });
+    }
+
+    // create cookie with user data
+    const userData = { userId: user.id, username: user.name, role: 'user' };
     res.cookie('user', JSON.stringify(userData), { signed: true });
-    console.log('wydano ciastko dla', userData);
+
+    console.log(`✅ Zalogowano jako ${user.name} (ID: ${user.id})`);
     res.redirect('/');
-  }
-  else {
-    res.render( 'login', { message : "Zły login lub hasło" });
+  } catch (error) {
+    console.error('❌ Błąd podczas logowania:', error.message);
+    res.status(500).send('Błąd serwera podczas logowania');
   }
 });
+
 
 app.get('/logout', (req, res) => {
   res.clearCookie('user');
   res.redirect('/'); 
 });
-
-
 
 
 
@@ -456,3 +501,20 @@ app.post('/remove-from-cart/:id', (req, res) => {
 app.listen(3000, () => {
   console.log('Server na http://localhost:3000/');
 });
+
+
+
+
+
+
+
+
+// some tests
+
+//insertUser(4, 'newuser', 'haslo123', 'email@example.com');
+//insertUser(3, 'pwaw8', '2137', 'test@example.com');
+//deleteUser (4); // lub nick
+//insertUser(7, 'user7', 'haslo7', 'email7@example.com');
+
+
+
