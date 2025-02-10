@@ -164,4 +164,39 @@ export async function insertUser(id, name, password, address) {
     }
 };
 
-insertUser(2, 'pwaw8', '2137', 'test@example.com');
+
+
+
+export async function deleteUser(identifier) {
+    let query;
+    let values;
+
+    if (typeof identifier === 'number') {
+        // if number -> remove by id
+        query = `DELETE FROM users WHERE id = $1 RETURNING *;`;
+        values = [identifier];
+    } else {
+        // if string -> remove by username
+        query = `DELETE FROM users WHERE name = $1 RETURNING *;`;
+        values = [identifier];
+    }
+
+    try {
+        const res = await pool.query(query, values);
+        if (res.rowCount === 0) {
+            console.log(`❌Nie znaleziono użytkownika: ${identifier}`);
+            return null;
+        }
+
+        console.log(`✅ Usunięto użytkownika: ${res.rows[0].name} (ID: ${res.rows[0].id})`);
+        return res.rows[0];
+    } catch (err) {
+        console.error('❌ Błąd przy usuwaniu użytkownika:', err.message);
+        throw err;
+    }
+};
+
+
+
+
+//insertUser(2, 'pwaw8', '2137', 'test@example.com');
